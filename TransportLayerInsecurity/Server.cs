@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
@@ -68,8 +69,7 @@ namespace TransportLayerInsecurity
 		{
 			Running = false;
 			Listener.Stop();
-			LocalStream.Close();
-			RemoteStream.Close();
+			CloseStreams();
 			ServerThread.Join();
 		}
 
@@ -82,12 +82,19 @@ namespace TransportLayerInsecurity
 			}
 		}
 
+		void CloseStreams()
+		{
+			LocalStream.Close();
+			RemoteStream.Close();
+		}
+
 		void ProcessClient(TcpClient localClient)
 		{
 			LocalStream = new SslStream(localClient.GetStream(), false);
 			LocalStream.AuthenticateAsServer(ServerCertificate);
 
-			TcpClient remoteClient = new TcpClient(RemoteEndpoint);
+			TcpClient remoteClient = new TcpClient();
+			remoteClient.Connect(RemoteEndpoint);
 			RemoteStream = new SslStream(remoteClient.GetStream(), false, new RemoteCertificateValidationCallback(TrustAllCertificates));
 			RemoteStream.AuthenticateAsClient(TargetHost);
 
@@ -100,16 +107,35 @@ namespace TransportLayerInsecurity
 
 			while (Running)
 			{
-				int bytesRead = LocalStream.Read(localContext.Buffer, 0, localContext.Buffer.Length);
-				if (bytesRead == 0)
+				int bytesRead;
+				try
 				{
-					RemoteStream.Close();
+					bytesRead = LocalStream.Read(localContext.Buffer, 0, localContext.Buffer.Length);
+					if (bytesRead == 0)
+					{
+						CloseStreams();
+						ServerEventHandler.OnLocalDisconnect();
+						return;
+					}
+				}
+				catch (IOException)
+				{
+					CloseStreams();
 					ServerEventHandler.OnLocalDisconnect();
 					return;
 				}
-				RemoteStream.Write(localContext.Buffer, 0, bytesRead);
-				byte[] data = localContext.Buffer.Take(bytesRead).ToArray();
-				ServerEventHandler.OnClientToServerData(data);
+				try
+				{
+					byte[] data = localContext.Buffer.Take(bytesRead).ToArray();
+					RemoteStream.Write(data);
+					ServerEventHandler.OnClientToServerData(data);
+				}
+				catch (IOException)
+				{
+					CloseStreams();
+					ServerEventHandler.OnRemoteDisconnect();
+					return;
+				}
 			}
 		}
 
@@ -125,17 +151,25 @@ namespace TransportLayerInsecurity
 
 		void OnRead(IAsyncResult result)
 		{
-			StreamContext remoteContext = (StreamContext)result.AsyncState;
-			int bytesRead = remoteContext.Stream.EndRead(result);
-			if (bytesRead == 0)
+			try
 			{
-				LocalStream.Close();
-				ServerEventHandler.OnRemoteDisconnect();
-				return;
+				StreamContext remoteContext = (StreamContext)result.AsyncState;
+				int bytesRead = remoteContext.Stream.EndRead(result);
+				if (bytesRead == 0)
+				{
+					CloseStreams();
+					ServerEventHandler.OnRemoteDisconnect();
+					return;
+				}
+				byte[] data = remoteContext.Buffer.Take(bytesRead).ToArray();
+				LocalStream.Write(data);
+				ServerEventHandler.OnServerToClientData(data);
+				Read(remoteContext);
 			}
-			byte[] data = remoteContext.Buffer.Take(bytesRead).ToArray();
-			ServerEventHandler.OnServerToClientData(data);
-			Read(remoteContext);
+			catch (ObjectDisposedException)
+			{
+				//This occurs after a disconnect
+			}
 		}
     }
 }
