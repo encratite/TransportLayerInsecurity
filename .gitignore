@@ -1,0 +1,7 @@
+bin
+obj
+*.suo
+*.user
+References
+Keys
+AssemblyInfo.cs
