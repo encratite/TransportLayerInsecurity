@@ -13,7 +13,7 @@ namespace Test
 
 		public ServerHandler(Configuration configuration)
 		{
-			Server = new Server(configuration.LocalHost, configuration.LocalPort, configuration.RemoteHost, configuration.RemotePort, configuration.CertificatePath, this);
+			Server = new Server(configuration.LocalHost, configuration.LocalPort, configuration.RemoteHost, configuration.RemotePort, configuration.CertificatePath, configuration.TargetHost, this);
 		}
 
 		public void Run()

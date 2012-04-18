@@ -11,7 +11,7 @@ namespace TransportLayerInsecurity
 {
     public class Server
     {
-		string RemoteHost;
+		string TargetHost;
 
 		IPEndPoint LocalEndpoint;
 		IPEndPoint RemoteEndpoint;
@@ -28,14 +28,14 @@ namespace TransportLayerInsecurity
 		SslStream LocalStream;
 		SslStream RemoteStream;
 
-		public Server(string localHost, int localPort, string remoteHost, int remotePort, string certificatePath, IServerEventHandler serverEventHandler)
+		public Server(string localHost, int localPort, string remoteHost, int remotePort, string certificatePath, string targetHost, IServerEventHandler serverEventHandler)
 		{
-			RemoteHost = remoteHost;
-
 			LocalEndpoint = GetEndpoint(localHost, localPort);
 			RemoteEndpoint = GetEndpoint(remoteHost, remotePort);
 
 			ServerCertificate = new X509Certificate(certificatePath);
+
+			TargetHost = targetHost;
 
 			Listener = new TcpListener(LocalEndpoint);
 
@@ -89,7 +89,7 @@ namespace TransportLayerInsecurity
 
 			TcpClient remoteClient = new TcpClient(RemoteEndpoint);
 			RemoteStream = new SslStream(remoteClient.GetStream(), false, new RemoteCertificateValidationCallback(TrustAllCertificates));
-			RemoteStream.AuthenticateAsClient(RemoteHost);
+			RemoteStream.AuthenticateAsClient(TargetHost);
 
 			ServerEventHandler.OnConnect();
 

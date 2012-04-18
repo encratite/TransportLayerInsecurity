@@ -9,5 +9,7 @@
 		public int RemotePort;
 
 		public string CertificatePath;
+
+		public string TargetHost;
 	}
 }
