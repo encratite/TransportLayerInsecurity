@@ -34,7 +34,7 @@ namespace TransportLayerInsecurity
 			LocalEndpoint = GetEndpoint(localHost, localPort);
 			RemoteEndpoint = GetEndpoint(remoteHost, remotePort);
 
-			ServerCertificate = new X509Certificate(certificatePath);
+			ServerCertificate = new X509Certificate(certificatePath, "");
 
 			TargetHost = targetHost;
 

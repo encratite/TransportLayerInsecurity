@@ -11,5 +11,7 @@
 		public string CertificatePath;
 
 		public string TargetHost;
+
+		public string LogPath;
 	}
 }
