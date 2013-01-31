@@ -1,12 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 11
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportLayerInsecurity", "TransportLayerInsecurity\TransportLayerInsecurity.csproj", "{12770F17-7BB8-4AE4-BF55-2EDA5D2FC52F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{AA6EF127-F4A9-48C9-9929-3F84E635EEA0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{12770F17-7BB8-4AE4-BF55-2EDA5D2FC52F} = {12770F17-7BB8-4AE4-BF55-2EDA5D2FC52F}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeagueOfLegends", "LeagueOfLegends\LeagueOfLegends.csproj", "{67C70415-5674-4A99-BA96-F2389EC1F645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,10 @@ Global
 		{AA6EF127-F4A9-48C9-9929-3F84E635EEA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA6EF127-F4A9-48C9-9929-3F84E635EEA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA6EF127-F4A9-48C9-9929-3F84E635EEA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C70415-5674-4A99-BA96-F2389EC1F645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C70415-5674-4A99-BA96-F2389EC1F645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C70415-5674-4A99-BA96-F2389EC1F645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C70415-5674-4A99-BA96-F2389EC1F645}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

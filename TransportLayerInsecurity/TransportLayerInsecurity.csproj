@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ServerConfiguration.cs" />
     <Compile Include="IServerEventHandler.cs" />
     <Compile Include="StreamContext.cs" />
     <Compile Include="Server.cs" />

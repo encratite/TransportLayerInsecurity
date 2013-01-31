@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Test")]
-[assembly: AssemblyDescription("Transport Layer Insecurity - Test")]
+[assembly: AssemblyTitle("LeagueOfLegends")]
+[assembly: AssemblyDescription("Transport Layer Insecurity - League of Legends Analysis")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]
@@ -13,6 +13,6 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("33e175a6-cba8-4b13-8da7-b76c34000dca")]
+[assembly: Guid("040d80f2-dade-41f6-9602-777ff12a0d61")]
 
 [assembly: AssemblyVersion("0.0.0.0")]

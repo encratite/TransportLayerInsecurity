@@ -4,12 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AA6EF127-F4A9-48C9-9929-3F84E635EEA0}</ProjectGuid>
+    <ProjectGuid>{67C70415-5674-4A99-BA96-F2389EC1F645}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test</RootNamespace>
-    <AssemblyName>Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>LeagueOfLegends</RootNamespace>
+    <AssemblyName>LeagueOfLegends</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,20 +42,24 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TransportLayerInsecurity">
-      <HintPath>..\TransportLayerInsecurity\bin\Debug\TransportLayerInsecurity.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServerHandler.cs" />
+    <Compile Include="HTTPServer.cs" />
     <Compile Include="Programme.cs" />
+    <Compile Include="ManInTheMiddle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RTMPServer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TransportLayerInsecurity\TransportLayerInsecurity.csproj">
+      <Project>{12770f17-7bb8-4ae4-bf55-2eda5d2fc52f}</Project>
+      <Name>TransportLayerInsecurity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-  </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>generateAssemblyInfo</PostBuildEvent>
   </PropertyGroup>

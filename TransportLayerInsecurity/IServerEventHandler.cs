@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace TransportLayerInsecurity
+﻿namespace TransportLayerInsecurity
 {
 	public interface IServerEventHandler
 	{

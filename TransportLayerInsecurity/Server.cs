@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -29,14 +28,14 @@ namespace TransportLayerInsecurity
 		SslStream LocalStream;
 		SslStream RemoteStream;
 
-		public Server(string localHost, int localPort, string remoteHost, int remotePort, string certificatePath, string targetHost, IServerEventHandler serverEventHandler)
+		public Server(ServerConfiguration configuration, IServerEventHandler serverEventHandler)
 		{
-			LocalEndpoint = GetEndpoint(localHost, localPort);
-			RemoteEndpoint = GetEndpoint(remoteHost, remotePort);
+			LocalEndpoint = GetEndpoint(configuration.LocalHost, configuration.LocalPort);
+			RemoteEndpoint = GetEndpoint(configuration.RemoteHost, configuration.RemotePort);
 
-			ServerCertificate = new X509Certificate(certificatePath, "");
+			ServerCertificate = new X509Certificate(configuration.CertificatePath, "");
 
-			TargetHost = targetHost;
+			TargetHost = configuration.TargetHost;
 
 			Listener = new TcpListener(LocalEndpoint);
 
@@ -46,16 +45,6 @@ namespace TransportLayerInsecurity
 			Running = false;
 
 			ServerEventHandler = serverEventHandler;
-		}
-
-		IPEndPoint GetEndpoint(string host, int port)
-		{
-			IPAddress address;
-			if (host == string.Empty || host == null)
-				address = IPAddress.Any;
-			else
-				address = Dns.GetHostAddresses(host)[0];
-			return new IPEndPoint(address, port);
 		}
 
 		public void Run()
@@ -71,6 +60,16 @@ namespace TransportLayerInsecurity
 			Listener.Stop();
 			CloseStreams();
 			ServerThread.Join();
+		}
+
+		IPEndPoint GetEndpoint(string host, int port)
+		{
+			IPAddress address;
+			if (host == string.Empty || host == null)
+				address = IPAddress.Any;
+			else
+				address = Dns.GetHostAddresses(host)[0];
+			return new IPEndPoint(address, port);
 		}
 
 		void RunThread()
@@ -103,7 +102,7 @@ namespace TransportLayerInsecurity
 			StreamContext localContext = new StreamContext(LocalStream);
 			StreamContext remoteContext = new StreamContext(RemoteStream);
 
-			Read(remoteContext);
+			ReadAsynchronously(remoteContext);
 
 			while (Running)
 			{
@@ -144,12 +143,12 @@ namespace TransportLayerInsecurity
 			return true;
 		}
 
-		void Read(StreamContext context)
+		void ReadAsynchronously(StreamContext context)
 		{
-			context.Stream.BeginRead(context.Buffer, 0, context.Buffer.Length, OnRead, context);
+			context.Stream.BeginRead(context.Buffer, 0, context.Buffer.Length, OnAsynchronousRead, context);
 		}
 
-		void OnRead(IAsyncResult result)
+		void OnAsynchronousRead(IAsyncResult result)
 		{
 			try
 			{
@@ -164,7 +163,7 @@ namespace TransportLayerInsecurity
 				byte[] data = remoteContext.Buffer.Take(bytesRead).ToArray();
 				LocalStream.Write(data);
 				ServerEventHandler.OnServerToClientData(data);
-				Read(remoteContext);
+				ReadAsynchronously(remoteContext);
 			}
 			catch (ObjectDisposedException)
 			{

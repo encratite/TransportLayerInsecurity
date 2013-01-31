@@ -1,13 +1,13 @@
 ﻿using Nil;
 using TransportLayerInsecurity;
 
-namespace Test
+namespace LeagueOfLegends
 {
-	class ServerHandler : IServerEventHandler
+	class RTMPServer : IServerEventHandler
 	{
 		Server Server;
 
-		public ServerHandler(ServerConfiguration configuration)
+		public RTMPServer(ServerConfiguration configuration)
 		{
 			Server = new Server(configuration, this);
 		}
@@ -19,6 +19,7 @@ namespace Test
 
 		void WriteLine(string line, params object[] arguments)
 		{
+			line = string.Format("[RTMP] {0}", line);
 			Output.WriteLine(line, arguments);
 		}
 
@@ -39,12 +40,12 @@ namespace Test
 
 		public void OnClientToServerData(byte[] data)
 		{
-			WriteLine("C->S: {0}", data.Length);
+			WriteLine("C->S: {0} bytes", data.Length);
 		}
 
 		public void OnServerToClientData(byte[] data)
 		{
-			WriteLine("S->C: {0}", data.Length);
+			WriteLine("S->C: {0} bytes", data.Length);
 		}
 	}
 }

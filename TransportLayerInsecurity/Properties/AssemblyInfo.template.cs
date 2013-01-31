@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("TransportLayerInsecurity")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Transport Layer Insecurity")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("")]

@@ -1,6 +1,6 @@
-﻿namespace Test
+﻿namespace TransportLayerInsecurity
 {
-	public class Configuration
+	public class ServerConfiguration
 	{
 		public string LocalHost;
 		public int LocalPort;

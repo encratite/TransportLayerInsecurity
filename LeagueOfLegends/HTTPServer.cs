@@ -1,13 +1,15 @@
-﻿using Nil;
+﻿using System.Text;
+
+using Nil;
 using TransportLayerInsecurity;
 
-namespace Test
+namespace LeagueOfLegends
 {
-	class ServerHandler : IServerEventHandler
+	class HTTPServer : IServerEventHandler
 	{
 		Server Server;
 
-		public ServerHandler(ServerConfiguration configuration)
+		public HTTPServer(ServerConfiguration configuration)
 		{
 			Server = new Server(configuration, this);
 		}
@@ -19,6 +21,7 @@ namespace Test
 
 		void WriteLine(string line, params object[] arguments)
 		{
+			line = string.Format("[HTTP] {0}", line);
 			Output.WriteLine(line, arguments);
 		}
 
@@ -39,12 +42,17 @@ namespace Test
 
 		public void OnClientToServerData(byte[] data)
 		{
-			WriteLine("C->S: {0}", data.Length);
+			WriteLine("C->S: {0}", ConvertToString(data));
 		}
 
 		public void OnServerToClientData(byte[] data)
 		{
-			WriteLine("S->C: {0}", data.Length);
+			WriteLine("S->C: {0}", ConvertToString(data));
+		}
+
+		string ConvertToString(byte[] data)
+		{
+			return Encoding.ASCII.GetString(data);
 		}
 	}
 }
