@@ -42,12 +42,12 @@ namespace LeagueOfLegends
 
 		public void OnClientToServerData(byte[] data)
 		{
-			WriteLine("C->S: {0}", ConvertToString(data));
+			WriteLine("C->S:\n{0}", ConvertToString(data));
 		}
 
 		public void OnServerToClientData(byte[] data)
 		{
-			WriteLine("S->C: {0}", ConvertToString(data));
+			WriteLine("S->C:\n{0}", ConvertToString(data));
 		}
 
 		string ConvertToString(byte[] data)
